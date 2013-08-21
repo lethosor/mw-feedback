@@ -40,6 +40,9 @@ jQuery(function($){
 				case 'section':
 					$('body').on('click', 'a[href=#'+trigger[1]+']', F.init);
 					break;
+				case 'tab':
+					F.ui.tab.show();
+					break;
 				default:
 					F.log('Unknown trigger type:', trigger[0])
 			}
@@ -56,9 +59,13 @@ jQuery(function($){
 	};
 	
 	F.exit = function(e){PD(e);
+		if (!F.exit.enabled) {
+			return false;
+		}
 		F.ui.hide();
 		return true;
 	};
+	F.exit.enabled = true;
 	
 	F.save = function(e){PD(e);
 		F.ui.error.fadeOut(200);
@@ -67,7 +74,17 @@ jQuery(function($){
 		if (!text) {
 			return F.save_error('Feedback is required!');
 		}
-		
+		F.ui.form.hide();
+		F.ui.close_link.hide();
+		F.ui.progress.show();
+		F.exit.enabled = false;
+		var p = F.ui.progress, w = function(s){p.html(p.html()+s)};
+		p.text('');
+		w('<strong>Submitting feedback...</strong>\nObtaining tokens... ');
+		var edit_token = mw.user.tokens.values.editToken,
+			watch_token = mw.user.tokens.values.watchToken;
+		var text = "==" + F.ui.f_title + "==\n" + F.ui.f_text + ' --~~~~';
+		w('Done.\nSaving...');
 		return true;
 	};
 	
@@ -79,6 +96,10 @@ jQuery(function($){
 	F.ui.show = function(e){PD(e);
 		F.ui.overlay.fadeIn(300);
 		F.ui.screen.fadeIn(300);
+		F.ui.form.show();
+		F.ui.close_link.show();
+		F.ui.progress.hide();
+		F.exit.enabled = true;
 	};
 	
 	F.ui.hide = function(e){PD(e);
@@ -87,6 +108,9 @@ jQuery(function($){
 		.add(F.ui.error)
 		.fadeOut(300);
 	};
+	
+	F.ui.tab = $('<li>').html('<span><a href="#F-init">Feedback</a><span>')
+		.insertAfter('#left-navigation ul:nth(0) li:last').hide();
 	
 	F.ui.overlay = $('<div>').css({
 		top:0, left:0, width:'100%', height:'100%', position:'fixed',
@@ -103,10 +127,13 @@ jQuery(function($){
 		color:'red', 'float':'right'
 	}).appendTo(F.ui.screen);
 	
+	$('body').on('click', 'a[href=#F-init]', F.init);
 	$('body').on('click', 'a[href=#F-exit]', F.exit);
 	
 	F.ui.screen.append('<h3>Feedback</h3>');
 	F.ui.form = $('<div>').appendTo(F.ui.screen).css({height:'100%'});
+	F.ui.progress = $('<div>').appendTo(F.ui.screen).css({height:'100%'}).hide()
+		.css({'white-space':'pre'});
 	
 	F.ui.f_title = $('<input>').attr({type:'text', placeholder:'Feedback for '+F.page.name})
 	.appendTo(F.ui.form).css({
