@@ -61,6 +61,7 @@ jQuery(function($){
 	};
 	
 	F.save = function(e){PD(e);
+		F.ui.error.fadeOut(200);
 		title = F.ui.f_title.val() || F.ui.f_title.attr('placeholder');
 		text = F.ui.f_text.val();
 		if (!text) {
@@ -105,12 +106,13 @@ jQuery(function($){
 	$('body').on('click', 'a[href=#F-exit]', F.exit);
 	
 	F.ui.screen.append('<h3>Feedback</h3>');
+	F.ui.form = $('<div>').appendTo(F.ui.screen).css({height:'100%'});
 	
 	F.ui.f_title = $('<input>').attr({type:'text', placeholder:'Feedback for '+F.page.name})
-	.appendTo(F.ui.screen).css({
+	.appendTo(F.ui.form).css({
 		'font-size': '1.2em'
 	});
-	F.ui.f_text = $('<textarea>').appendTo(F.ui.screen).css({
+	F.ui.f_text = $('<textarea>').appendTo(F.ui.form).css({
 		height:'50%',
 		'font-size': '1em'
 	}).attr({placeholder:'Feedback'});
@@ -122,7 +124,7 @@ jQuery(function($){
 		margin: 6,
 		'padding': 5
 	});
-	F.ui.watch = $('<input>').attr({type:'checkbox', id:'F-watch'}).appendTo(F.ui.screen)
+	F.ui.watch = $('<input>').attr({type:'checkbox', id:'F-watch'}).appendTo(F.ui.form)
 	.css({
 		'float':'left'
 	}).prop('checked', F.opts.watch);
@@ -132,8 +134,8 @@ jQuery(function($){
 		F.ui.watch_label.hide();
 		F.opts.watch = false;
 	}
-	F.ui.b_submit = $('<button>').text('Submit feedback').appendTo(F.ui.screen).click(F.save);
-	F.ui.b_cancel = $('<button>').text('Cancel').appendTo(F.ui.screen).click(F.exit);
+	F.ui.b_submit = $('<button>').text('Submit feedback').appendTo(F.ui.form).click(F.save);
+	F.ui.b_cancel = $('<button>').text('Cancel').appendTo(F.ui.form).click(F.exit);
 	F.ui.b_cancel.add(F.ui.b_submit).css({
 		color: '#333',
 		'background-color': '#ddd',
@@ -144,7 +146,7 @@ jQuery(function($){
 		cursor: 'pointer',
 		'font-size': '1em'
 	});
-	F.ui.error = $('<div>').css({color:'red', 'clear':'both'}).appendTo(F.ui.screen);
+	F.ui.error = $('<div>').css({color:'red', 'clear':'both'}).hide().appendTo(F.ui.form);
 	
 	F.setup();
 	window.Feedback = F;
