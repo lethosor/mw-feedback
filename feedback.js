@@ -126,12 +126,14 @@ jQuery(function($){
 		if (!('captcha' in d.edit)) {
 			return false;
 		}
+		F.ui.screen.animate({height: '50%'}, 400);
 		switch (d.edit.captcha.type) {
 			case 'recaptcha':
 				$('<div id="F-recaptcha">').appendTo(F.ui.progress);
 				Recaptcha.create(d.edit.captcha.key, 'F-recaptcha');
 				$('<a href="#F-exit">Cancel</a>').appendTo(F.ui.progress);
 				$('<a href="#">OK</a>').click(function(e){PD(e);
+					F.ui.screen.animate({height: '15%'}, 400);
 					F.save(0, {
 						captchaid: $('#recaptcha_challenge_field').val(),
 						captchaword: $('#recaptcha_response_field').val()
