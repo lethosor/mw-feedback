@@ -107,12 +107,12 @@ jQuery(function($){
 		// Obtain talk page title
 		$.get(api_path, {action:'parse', format:'json', title:wgPageName,
 		      text:'{{TALKPAGENAME}}'}, function(d){
-			if ('captcha' in d.edit) {
-				F.save_captcha(query, d);
-				return;
-			}
 			query.title = $('<span>').html(d.parse.text['*']).text().replace(/\n/g, '');
 			$.post(api_path, query, function(d){
+				if ('captcha' in d.edit) {
+					F.save_captcha(query, d);
+					return;
+				}
 				p.html('<p style="color:green">Thank you!</p>');
 				F.exit.enabled = true;
 				setTimeout(F.exit, 500);
