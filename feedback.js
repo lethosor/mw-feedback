@@ -141,7 +141,7 @@ jQuery(function($){
 						captchaid: $('#recaptcha_challenge_field').val(),
 						captchaword: $('#recaptcha_response_field').val()
 					});
-				}).appendTo(F.ui.progress).css('padding-left': '1em');
+				}).appendTo(F.ui.progress).css('padding-left', '1em');
 				break;
 			default:
 				return false;
@@ -215,6 +215,9 @@ jQuery(function($){
 		'padding': 5,
 		'font-family': 'sans-serif'
 	});
+	
+	$('<div>').css('clear','both').insertAfter(F.ui.f_text);
+	
 	F.ui.watch = $('<input>').attr({type:'checkbox', id:'F-watch'}).appendTo(F.ui.form)
 	.css({
 		'float':'left'
