@@ -123,13 +123,13 @@ jQuery(function($){
 	};
 	
 	F.save_captcha = function(q, d){
-		if (!('captcha' in q.edit)) {
+		if (!('captcha' in d.edit)) {
 			return false;
 		}
-		switch (q.edit.captcha.type) {
+		switch (d.edit.captcha.type) {
 			case 'recaptcha':
 				$('<div id="F-recaptcha">').appendTo(F.ui.progress);
-				Recaptcha.create(q.edit.captcha.key, 'F-recaptcha');
+				Recaptcha.create(d.edit.captcha.key, 'F-recaptcha');
 				$('<a href="#F-exit">Cancel</a>').appendTo(F.ui.progress);
 				$('<a href="#">OK</a>').click(function(e){PD(e);
 					F.save(0, {
