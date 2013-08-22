@@ -58,6 +58,10 @@ jQuery(function($){
 		return true;
 	};
 	
+	F.reset = function(e){PD(e);
+		F.ui.form.find('input[type=text], textarea').val('');
+	};
+	
 	F.exit = function(e){PD(e);
 		if (!F.exit.enabled) {
 			return false;
@@ -78,13 +82,38 @@ jQuery(function($){
 		F.ui.close_link.hide();
 		F.ui.progress.show();
 		F.exit.enabled = false;
-		var p = F.ui.progress, w = function(s){p.html(p.html()+s)};
-		p.text('');
-		w('<strong>Submitting feedback...</strong>\nObtaining tokens... ');
+		F.ui.screen.animate({height: '15%'}, 400);
+		
 		var edit_token = mw.user.tokens.values.editToken,
-			watch_token = mw.user.tokens.values.watchToken;
-		var text = "==" + F.ui.f_title + "==\n" + F.ui.f_text + ' --~~~~';
-		w('Done.\nSaving...');
+			watch_token = mw.user.tokens.values.watchToken,
+			title = (F.ui.f_title.val() ?
+				 'Feedback: '+F.ui.f_title.val() :
+				 ('Feedback from '+window.wgUserName||'anonymous user')),
+			text = F.ui.f_text.val() + ' --~~~~',
+			api_path = wgScriptPath + '/api.php',
+			query = {
+				action: 'edit',
+				section: 'new',
+				text: text,
+				summary: title,
+				token: edit_token
+			},
+			p = F.ui.progress.html('<p>Submitting feedback...</p>');
+		
+		if (F.opts.watch) {
+			query.watch = 1;
+		}
+		// Obtain talk page title
+		$.get(api_path, {action:'parse', format:'json', title:wgPageName,
+		      text:'{{TALKPAGENAME}}'}, function(d){
+			query.title = $('<span>').html(d.parse.text['*']).text().replace(/\n/g, '');
+			$.post(api_path, query, function(d){
+				p.html('<p style="color:green">Thank you!</p>');
+				F.exit.enabled = true;
+				setTimeout(F.exit, 500);
+				F.reset();
+			});
+		});
 		return true;
 	};
 	
@@ -95,7 +124,7 @@ jQuery(function($){
 	
 	F.ui.show = function(e){PD(e);
 		F.ui.overlay.fadeIn(300);
-		F.ui.screen.fadeIn(300);
+		F.ui.screen.fadeIn(300).css({height: '50%'});
 		F.ui.form.show();
 		F.ui.close_link.show();
 		F.ui.progress.hide();
@@ -133,9 +162,9 @@ jQuery(function($){
 	F.ui.screen.append('<h3>Feedback</h3>');
 	F.ui.form = $('<div>').appendTo(F.ui.screen).css({height:'100%'});
 	F.ui.progress = $('<div>').appendTo(F.ui.screen).css({height:'100%'}).hide()
-		.css({'white-space':'pre'});
+		.css({'text-align':'center'});
 	
-	F.ui.f_title = $('<input>').attr({type:'text', placeholder:'Feedback for '+F.page.name})
+	F.ui.f_title = $('<input>').attr({type:'text', placeholder:'Title'})
 	.appendTo(F.ui.form).css({
 		'font-size': '1.2em'
 	});
