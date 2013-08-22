@@ -127,18 +127,21 @@ jQuery(function($){
 			return false;
 		}
 		F.ui.screen.animate({height: '50%'}, 400);
+		F.exit.enabled = true;
 		switch (d.edit.captcha.type) {
 			case 'recaptcha':
-				$('<div id="F-recaptcha">').appendTo(F.ui.progress);
+				$('<p>').appendTo(F.ui.progress)
+				.html('To prevent spam, please type the words you see in the box below.');				$('<div id="F-recaptcha">').appendTo(F.ui.progress);
 				Recaptcha.create(d.edit.captcha.key, 'F-recaptcha');
 				$('<a href="#F-exit">Cancel</a>').appendTo(F.ui.progress);
 				$('<a href="#">OK</a>').click(function(e){PD(e);
+					F.exit.enabled = false;
 					F.ui.screen.animate({height: '15%'}, 400);
 					F.save(0, {
 						captchaid: $('#recaptcha_challenge_field').val(),
 						captchaword: $('#recaptcha_response_field').val()
 					});
-				}).appendTo(F.ui.progress);
+				}).appendTo(F.ui.progress).css('padding-left': '1em');
 				break;
 			default:
 				return false;
