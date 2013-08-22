@@ -88,11 +88,12 @@ jQuery(function($){
 			watch_token = mw.user.tokens.values.watchToken,
 			title = (F.ui.f_title.val() ?
 				 'Feedback: '+F.ui.f_title.val() :
-				 ('Feedback from '+window.wgUserName||'anonymous user')),
+				 'Feedback from '+(window.wgUserName||'anonymous user')),
 			text = F.ui.f_text.val() + ' --~~~~',
 			api_path = wgScriptPath + '/api.php',
 			query = {
 				action: 'edit',
+				format: 'json',
 				section: 'new',
 				text: text,
 				summary: title,
