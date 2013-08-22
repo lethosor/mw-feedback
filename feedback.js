@@ -71,7 +71,7 @@ jQuery(function($){
 	};
 	F.exit.enabled = true;
 	
-	F.save = function(e){PD(e);
+	F.save = function(e, captcha){PD(e);
 		F.ui.error.fadeOut(200);
 		title = F.ui.f_title.val() || F.ui.f_title.attr('placeholder');
 		text = F.ui.f_text.val();
@@ -100,13 +100,17 @@ jQuery(function($){
 				token: edit_token
 			},
 			p = F.ui.progress.html('<p>Submitting feedback...</p>');
-		
+		$.extend(query, captcha);
 		if (F.opts.watch) {
 			query.watch = 1;
 		}
 		// Obtain talk page title
 		$.get(api_path, {action:'parse', format:'json', title:wgPageName,
 		      text:'{{TALKPAGENAME}}'}, function(d){
+			if ('captcha' in d.edit) {
+				F.save_captcha(query, d);
+				return;
+			}
 			query.title = $('<span>').html(d.parse.text['*']).text().replace(/\n/g, '');
 			$.post(api_path, query, function(d){
 				p.html('<p style="color:green">Thank you!</p>');
@@ -115,6 +119,28 @@ jQuery(function($){
 				F.reset();
 			});
 		});
+		return true;
+	};
+	
+	F.save_captcha = function(q, d){
+		if (!('captcha') in q.edit) {
+			return false;
+		}
+		switch (q.edit.captcha.type) {
+			case 'recaptcha':
+				$('<div id="F-recaptcha">').appendTo(F.ui.progress);
+				Recaptcha.create(q.edit.captcha.key, 'F-recaptcha');
+				$('<a href="#F-exit">Cancel</a>').appendTo(F.ui.progress);
+				$('<a href="#">OK</a>').click(function(e){PD(e);
+					F.save(0, {
+						captchaid: $('#recaptcha_challenge_field').val(),
+						captchaword: $('#recaptcha_response_field').val()
+					});
+				}).appendTo(F.ui.progress);
+				break;
+			default:
+				return false;
+		}
 		return true;
 	};
 	
