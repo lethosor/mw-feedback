@@ -126,7 +126,7 @@ jQuery(function($){
 		if (!('captcha' in d.edit)) {
 			return false;
 		}
-		F.ui.screen.animate({height: '50%'}, 400);
+		F.ui.screen.stop().animate({height: '50%'}, 400);
 		F.exit.enabled = true;
 		switch (d.edit.captcha.type) {
 			case 'recaptcha':
@@ -212,7 +212,8 @@ jQuery(function($){
 		'border-radius': 2,
 		color: '#333',
 		margin: 6,
-		'padding': 5
+		'padding': 5,
+		'font-family': 'sans-serif'
 	});
 	F.ui.watch = $('<input>').attr({type:'checkbox', id:'F-watch'}).appendTo(F.ui.form)
 	.css({
