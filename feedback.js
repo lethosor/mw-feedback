@@ -166,14 +166,14 @@ jQuery(function($){
 	F.ui.progress = $('<div>').appendTo(F.ui.screen).css({height:'100%'}).hide()
 		.css({'text-align':'center'});
 	
-	F.ui.f_title = $('<input>').attr({type:'text', placeholder:'Title'})
+	F.ui.f_title = $('<input>').attr({type:'text', placeholder:'Title', title:'Title'})
 	.appendTo(F.ui.form).css({
 		'font-size': '1.2em'
 	});
 	F.ui.f_text = $('<textarea>').appendTo(F.ui.form).css({
 		height:'50%',
 		'font-size': '1em'
-	}).attr({placeholder:'Feedback'});
+	}).attr({placeholder:'Feedback (required)', title:'Feedback (required)'});
 	F.ui.f_text.add(F.ui.f_title).css({
 		width: '95%',
 		border: '1px solid #ccc',
