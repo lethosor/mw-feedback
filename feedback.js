@@ -125,6 +125,7 @@ jQuery(function($){
 	F.ui.show = function(e){PD(e);
 		F.ui.overlay.fadeIn(300);
 		F.ui.screen.fadeIn(300).css({height: '50%'});
+		F.ui.tab.addClass('selected');
 		F.ui.form.show();
 		F.ui.close_link.show();
 		F.ui.progress.hide();
@@ -136,6 +137,7 @@ jQuery(function($){
 		.add(F.ui.screen)
 		.add(F.ui.error)
 		.fadeOut(300);
+		F.ui.tab.removeClass('selected');
 	};
 	
 	F.ui.tab = $('<li>').html('<span><a href="#F-init">Feedback</a><span>')
@@ -187,6 +189,7 @@ jQuery(function($){
 	F.ui.watch_label = $('<label for="F-watch">').text('Watch for changes')
 	.insertAfter(F.ui.watch);
 	if (!wgUserName) {
+		F.ui.watch.hide();
 		F.ui.watch_label.hide();
 		F.opts.watch = false;
 	}
