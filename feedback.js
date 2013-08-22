@@ -123,7 +123,7 @@ jQuery(function($){
 	};
 	
 	F.save_captcha = function(q, d){
-		if (!('captcha') in q.edit) {
+		if (!('captcha' in q.edit)) {
 			return false;
 		}
 		switch (q.edit.captcha.type) {
