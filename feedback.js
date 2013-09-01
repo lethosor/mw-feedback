@@ -206,6 +206,14 @@ jQuery(function($){
 		height:'50%',
 		'font-size': '1em'
 	}).attr({placeholder:'Feedback (required)', title:'Feedback (required)'});
+	F.ui.f_section = $('<select>').insertBefore(F.ui.f_title).css({
+		'float': 'left'
+	}).attr('id', 'F-section');
+	F.ui.f_section.append($('<option>').text('(No section)').attr({value:0}));
+	$('#mw-content-text').children('h1,h2,h3,h4,h5,h6').each(function(i, e){
+		F.ui.f_section.append($('<option>').text($(e).find('.mw-headline').text()).attr({value:1}));
+	});
+	
 	F.ui.f_text.add(F.ui.f_title).css({
 		width: '95%',
 		border: '1px solid #ccc',
@@ -232,14 +240,15 @@ jQuery(function($){
 	F.ui.b_submit = $('<button>').text('Submit feedback').appendTo(F.ui.form).click(F.save);
 	F.ui.b_cancel = $('<button>').text('Cancel').appendTo(F.ui.form).click(F.exit);
 	F.ui.b_cancel.add(F.ui.b_submit).css({
-		color: '#333',
-		'background-color': '#ddd',
-		border: 'none',
-		'border-radius': 2,
 		'float': 'right',
-		'margin-right': 5,
+		'background-color': '#ddd',
 		cursor: 'pointer',
-		'font-size': '1em'
+	}).add(F.ui.f_section).css({
+		border: '1px solid #ddd',
+		color: '#333',
+		'border-radius': 2,
+		'margin-right': 5,
+		'font-size': '1em',
 	});
 	F.ui.error = $('<div>').css({color:'red', 'clear':'both'}).hide().appendTo(F.ui.form);
 	
