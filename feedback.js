@@ -79,6 +79,9 @@ jQuery(function($){
 		}
 		// Remove trailing whitespace
 		text = text.replace(/\s+$/, '') + ' --~~~~';
+		text = ('<div style="color:#888;padding-left:2em;">$1</div>\n'.replace(/\$1/g,
+			Number(F.ui.f_section.val()) ? 'Section: ' + F.ui.f_section.find(':selected').text() : 'No section specified'
+		)) + text;
 		F.ui.form.hide();
 		F.ui.close_link.hide();
 		F.ui.progress.show();
