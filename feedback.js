@@ -73,11 +73,12 @@ jQuery(function($){
 	
 	F.save = function(e, captcha){PD(e);
 		F.ui.error.fadeOut(200);
-		title = F.ui.f_title.val() || F.ui.f_title.attr('placeholder');
-		text = F.ui.f_text.val();
+		var text = F.ui.f_text.val();
 		if (!text) {
 			return F.save_error('Feedback is required!');
 		}
+		// Remove trailing whitespace
+		text = text.replace(/\s+$/, '') + ' --~~~~';
 		F.ui.form.hide();
 		F.ui.close_link.hide();
 		F.ui.progress.show();
@@ -89,7 +90,6 @@ jQuery(function($){
 			title = (F.ui.f_title.val() ?
 				 'Feedback: '+F.ui.f_title.val() :
 				 'Feedback from '+(window.wgUserName||'anonymous user')),
-			text = F.ui.f_text.val() + ' --~~~~',
 			api_path = wgScriptPath + '/api.php',
 			query = {
 				action: 'edit',
