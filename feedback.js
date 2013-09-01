@@ -43,6 +43,9 @@ jQuery(function($){
 				case 'tab':
 					F.ui.tab.show();
 					break;
+				case 'sectionlink':
+					$('.F-section-link').show();
+					break;
 				default:
 					F.log('Unknown trigger type:', trigger[0])
 			}
@@ -55,6 +58,12 @@ jQuery(function($){
 			return false;
 		}
 		F.ui.show();
+		var section = $(this).data('section')
+		if (section) {
+			F.ui.f_section.find('option').filter(function(i, e){
+				return $(e).text() == section
+			}).prop('selected', true);
+		}
 		return true;
 	};
 	
@@ -213,8 +222,15 @@ jQuery(function($){
 		'float': 'left'
 	}).attr('id', 'F-section');
 	F.ui.f_section.append($('<option>').text('(No section)').attr({value:0}));
+	
 	$('#mw-content-text').children('h1,h2,h3,h4,h5,h6').each(function(i, e){
-		F.ui.f_section.append($('<option>').text($(e).find('.mw-headline').text()).attr({value:1}));
+		var section = $(e).find('.mw-headline').text();
+		F.ui.f_section.append($('<option>').text(section).attr({value:1}));
+		$(e).find('.editsection').prepend(
+			$('<span>').text('[').append(
+				$('<a>').attr('href','#F-init').text('Leave feedback').data({section:section})
+			).append('] ').addClass('F-section-link').hide()
+		)
 	});
 	
 	F.ui.f_text.add(F.ui.f_title).css({
