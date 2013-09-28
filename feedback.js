@@ -1,6 +1,6 @@
 /*
  * MediaWiki article feedback tool
- */
+ <nowiki>*/
 jQuery(function($){
 	var F = {ui:{}, page:{}};
 	var PD=function(e){ // preventDefault shorthand
@@ -275,3 +275,4 @@ jQuery(function($){
 	F.setup();
 	window.Feedback = F;
 });
+//</nowiki>
