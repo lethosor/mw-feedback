@@ -185,7 +185,7 @@ jQuery(function($){
 		F.ui.tab.removeClass('selected');
 	};
 	
-	F.ui.tab = $('<li>').html('<span><a href="#F-init">Feedback</a><span>')
+	F.ui.tab = $('<li>').html('<span><a href="#F-init">Leave feedback</a><span>')
 		.insertAfter('#left-navigation ul:nth(0) li:last').hide();
 	
 	F.ui.overlay = $('<div>').css({
